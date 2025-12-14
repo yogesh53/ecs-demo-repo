@@ -38,11 +38,23 @@ jobs:
             --task-definition ${{ vars.ECS_TASK }} \
             --query taskDefinition \
             > task-def.json
+      - name: Clean task definition
+        run: |
+          jq 'del(
+            .taskDefinitionArn,
+            .revision,
+            .status,
+            .requiresAttributes,
+            .compatibilities,
+            .registeredAt,
+            .registeredBy
+          )' task-def.json > clean-task-def.json
+
       - name: Replace image in task definition
         run: |
           NEW_IMAGE=${{ vars.ECR_URI }}:${IMAGE_TAG}
           jq '.containerDefinitions[0].image = "'"$NEW_IMAGE"'"' \
-            task-def.json > new-task-def.json
+            clean-task-def.json > new-task-def.json
       - name: Register new task definition
         run: |
           aws ecs register-task-definition \
@@ -52,5 +64,5 @@ jobs:
           aws ecs update-service \
             --cluster ${{ vars.ECS_CLUSTER }} \
             --service ${{ vars.ECS_SERVICE }} \
-            --task-definition ecs-demo-task
+            --task-definition ${{ vars.ECS_TASK }}
         
