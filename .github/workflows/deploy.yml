@@ -35,7 +35,7 @@ jobs:
       - name: Get current task definition
         run: |
           aws ecs describe-task-definition \
-            --task-definition ecs-demo-task \
+            --task-definition ${{ vars.ECS_TASK }} \
             --query taskDefinition \
             > task-def.json
       - name: Replace image in task definition
