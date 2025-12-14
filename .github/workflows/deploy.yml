@@ -53,7 +53,7 @@ jobs:
 
       - name: Replace image in task definition
         run: |
-          NEW_IMAGE=${{ECR_URI}}:${IMAGE_TAG}
+          NEW_IMAGE="$ECR_URI:$IMAGE_TAG"
           jq '.containerDefinitions[0].image = "'"$NEW_IMAGE"'"' \
             clean-task-def.json > new-task-def.json
       - name: Register new task definition
