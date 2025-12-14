@@ -30,6 +30,7 @@ jobs:
             --repository-names ${{ vars.ECR_REPOSITORY }} \
             --query 'repositories[0].repositoryUri' \
             --output text)
+          echo "ECR_URI=$ECR_URI" >> $GITHUB_ENV
           docker build -f docker/Dockerfile -t $ECR_URI:$IMAGE_TAG .
           docker push $ECR_URI:$IMAGE_TAG
       - name: Get current task definition
@@ -52,7 +53,7 @@ jobs:
 
       - name: Replace image in task definition
         run: |
-          NEW_IMAGE=${{ vars.ECR_URI }}:${IMAGE_TAG}
+          NEW_IMAGE=${{ECR_URI}}:${IMAGE_TAG}
           jq '.containerDefinitions[0].image = "'"$NEW_IMAGE"'"' \
             clean-task-def.json > new-task-def.json
       - name: Register new task definition
