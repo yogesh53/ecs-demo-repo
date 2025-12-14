@@ -22,7 +22,7 @@ resource "aws_ecs_task_definition" "task_def" {
   container_definitions = jsonencode([
     {
       name      = "my-container"
-      image     = "767397770552.dkr.ecr.ap-south-1.amazonaws.com/ecs-devops-demo:1.0"
+      image     = "767397770552.dkr.ecr.ap-south-1.amazonaws.com/ecs-devops-demo:latest"
       essential = true
       portMappings = [
         {
