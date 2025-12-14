@@ -21,7 +21,10 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v2
       - name: Build and push Docker image
         run: |
-          IMAGE_TAG=${GITHUB_SHA}
+          ls
+          COMMIT_ID=$(echo $GITHUB_SHA | cut -c1-7)
+          DATE=$(date +"%d.%m.%Y")
+          IMAGE_TAG="${COMMIT_ID}-${DATE}"
           ECR_URI=$(aws ecr describe-repositories \
             --repository-names ${{ vars.ECR_REPOSITORY }} \
             --query 'repositories[0].repositoryUri' \
