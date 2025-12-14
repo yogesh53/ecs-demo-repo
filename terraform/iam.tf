@@ -39,7 +39,8 @@ resource "aws_iam_policy" "github_actions_policy" {
           "ecr:UploadLayerPart",
           "ecr:CompleteLayerUpload",
           "ecr:PutImage",
-          "ecr:BatchGetImage"
+          "ecr:BatchGetImage",
+          "ecr:DescribeRepositories"
         ]
         Resource = "*"
       },
